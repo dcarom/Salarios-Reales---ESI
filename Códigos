@@ -1,4 +1,6 @@
 
+```{r}
+
 
 ########## Hombres Jóvenes
 
@@ -46,6 +48,20 @@ variacion_quintilhj <- ggplot(salario_variacionhj, aes(x = as.integer(ano_encues
 
 # Guardar el gráfico
 ggsave("variacion_acumulada_hj_quintiles.png", plot = variacion_quintilhj, width = 10, height = 6, dpi = 300)
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
 
 
 
