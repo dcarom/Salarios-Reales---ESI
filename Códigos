@@ -1,3 +1,57 @@
+```{r}
+
+
+##########Hombres Jóvenes
+
+
+library(dplyr)
+
+# Supongamos que tienes varios dataframes: ingresos_1990, ingresos_2000, ingresos_2010, etc.
+# Asegúrate de que cada dataframe tenga una columna 'Anio', 'Quintil', y 'Ingreso'
+
+
+# Convertir la columna a character en todos los dataframes
+ESI2010hj$a6_otro <- as.character(ESI2010hj$a6_otro)
+ESI2011hj$a6_otro <- as.character(ESI2011hj$a6_otro)
+# Repite para todos los dataframes
+
+
+
+# Combinar todos los dataframes en uno solo
+ingresos_combinedhj <- bind_rows(ESI2010hj, ESI2011hj, ESI2012hj, ESI2013hj, ESI2014hj, ESI2015hj, ESI2016hj, ESI2017hj, ESI2018hj, ESI2019hj, ESI2020hj, ESI2021hj, ESI2022hj)
+
+
+
+library(dplyr)
+
+# Calcular el salario promedio por quintil y año
+salario_promediohj <- ingresos_combinedhj %>%
+  group_by(ano_encuesta, quintil_ingreso) %>%
+  summarise(
+    salario_promedio = sum(d1_monto * fact_per) / sum(fact_per)
+  ) %>%
+  ungroup()  # Eliminar el agrupamiento para evitar problemas en operaciones posteriores
+
+
+
+salario_promediohj <- salario_promediohj %>%
+  mutate(quintil_ingreso = as.factor(quintil_ingreso))
+
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
 
 ```{r}
 
