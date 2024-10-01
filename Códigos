@@ -1,1 +1,58 @@
 
+
+########## Hombres Jóvenes
+
+
+library(dplyr)
+
+# Definir el primer año como base para el cálculo de variación porcentual
+anio_base <- min(salario_promediohj$ano_encuesta, na.rm = TRUE)
+
+# Calcular la variación porcentual acumulada respecto al primer año
+salario_variacionhj <- salario_promediohj %>%
+  group_by(quintil_ingreso) %>%
+  mutate(salario_base = salario_promedio[ano_encuesta == anio_base],
+         variacion_acumulada = (salario_promedio - salario_base) / salario_base * 100) %>%
+  ungroup()
+
+# Mostrar la tabla con la variación porcentual acumulada
+print(salario_variacionhj)
+
+
+library(ggplot2)
+library(scales)
+
+# Graficar la variación porcentual acumulada por quintil
+variacion_quintilhj <- ggplot(salario_variacionhj, aes(x = as.integer(ano_encuesta), y = variacion_acumulada, color = quintil_ingreso, group = quintil_ingreso)) +
+  geom_line(size = 1) +  # Añadir las líneas de cada quintil
+  geom_point(size = 2) +  # Añadir los puntos para cada quintil
+  labs(title = "Evolución de la Variación Porcentual Acumulada de Salarios por Quintil Hombres Jóvenes",
+       x = "Año",
+       y = "Variación Porcentual Acumulada (%)") +
+  theme_classic() +  # Usar un tema clásico
+  scale_y_continuous(
+    labels = label_comma()  # Formatear los valores del eje y
+  ) +
+  scale_x_continuous(
+    breaks = seq(min(salario_variacionhj$ano_encuesta, na.rm = TRUE), 
+                 max(salario_variacionhj$ano_encuesta, na.rm = TRUE), by = 2)  # Saltar de 2 en 2 años
+  ) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),  # Centrar y ajustar el tamaño del título
+    axis.title = element_text(size = 12, face = "bold"),  # Ajustar el tamaño y estilo de los títulos de los ejes
+    axis.text = element_text(size = 10)  # Ajustar el tamaño del texto de los ejes
+  ) +
+  scale_color_manual(values = c("red", "blue", "green", "purple", "orange"))  # Definir colores personalizados para cada quintil
+
+# Guardar el gráfico
+ggsave("variacion_acumulada_hj_quintiles.png", plot = variacion_quintilhj, width = 10, height = 6, dpi = 300)
+
+
+
+
+
+
+
+
+
+
